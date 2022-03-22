@@ -7,7 +7,7 @@ GtkWidget*fix, *btn,*window;
   //creation d'un fixed
   fix= gtk_fixed_new();
   //ajouter un widget dans une position (100,200)
-   gtk_fixed_move(GTK_FIXED(fix),btn,x,y);
+   gtk_fixed_put(GTK_FIXED(fix),btn,x,y);
    //deplacer un element vers une nouvelle position (40,10)
-  gtk_fixed_put(GTK_FIXED(fix),btn,40,10);
+  gtk_fixed_move(GTK_FIXED(fix),btn,40,10);
    gtk_container_add(GTK_CONTAINER(window),fix);
