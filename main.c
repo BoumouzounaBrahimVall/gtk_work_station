@@ -92,15 +92,25 @@ void add_bgcolor(GtkWidget*widget,gchar*couleur,gfloat opc)
     color.alpha=opc;
     gtk_widget_override_background_color(widget,GTK_STATE_FLAG_NORMAL,&color);
 }
+
+
+coordonnees walo()
+{
+    coordonnees c;
+    c.x=0;
+    c.y=0;
+    return c;
+}
+
 ///-----------------------------------WINDOW-----------------------------------------------------------------------
 
 
 /*************************************************************
   La fonction : init_window
-  -Entrees :  titre de la fenêtre
-      hauteur de notre fenêtre
-      largeur de notre fenêtre
-      position par defaults de la fenêtre :
+  -Entrees :  titre de la fenÃªtre
+      hauteur de notre fenÃªtre
+      largeur de notre fenÃªtre
+      position par defaults de la fenÃªtre :
         A = GTK_WIN_POS_NONE
         B = GTK_WIN_POS_CENTER
         C = GTK_WIN_POS_MOUSE
@@ -109,7 +119,7 @@ void add_bgcolor(GtkWidget*widget,gchar*couleur,gfloat opc)
                 Ou bien
         position dans l'axe des x
         position dans l'axe des y
-      Possibilité de changer la taille:
+      PossibilitÃ© de changer la taille:
         0=NON
         1=OUI
       chemin de l'icon de la fenetre
@@ -159,7 +169,7 @@ Fenetre* init_window(gchar* titre,POS P,dimension D, gint res, gchar*path,color_
 /*************************************************************
  La fonction : pos_Window
  Entree :Un pointeur vers la structure Fenetre
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable W (Fenetre)
  Description : Cette fonction permet d'affecter un type de
     positionement de la fenetre
@@ -179,7 +189,7 @@ Fenetre *pos_Window(Fenetre*W)
             // Toujours au centre
         case 'D' : gtk_window_set_position(GTK_WINDOW(W->window),GTK_WIN_POS_CENTER_ALWAYS);
             break;
-            // Au centre par rapport a l'élement parent
+            // Au centre par rapport a l'Ã©lement parent
         case 'E' : gtk_window_set_position(GTK_WINDOW(W->window),GTK_WIN_POS_CENTER_ON_PARENT);
             break;
     }
@@ -188,10 +198,10 @@ Fenetre *pos_Window(Fenetre*W)
 /*************************************************************
  La fonction : creer_Window
  Entree :Un pointeur vers la structure Fenetre
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable W (Fenetre)
- Description : Cette fonction permet de créer une fenêtre en
-Fct des paramètres récupérés de la structure
+ Description : Cette fonction permet de crÃ©er une fenÃªtre en
+Fct des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure
                  Fenetre
 *************************************************************/
 Fenetre* creer_Window(Fenetre *W)
@@ -237,19 +247,20 @@ Fenetre* creer_Window(Fenetre *W)
 
 /*
  * structure du widget GTK_BOX
- * Expend: n'est utile que si la GtkBox en question n'est pas définie comme homogène (homogeneous=FALSE lors de la création).
- * Dans ce cas, tous les widgets qui auront été insérés avec la valeur expand=TRUE se partageront tout l'espace libre de la GtkBox
- * (les widgets avec expand=FALSE n'utiliseront que l'espace qui leur est nécessaire).
+ * Expend: n'est utile que si la GtkBox en question n'est pas dÃ©finie comme homogÃ¨ne (homogeneous=FALSE lors de la crÃ©ation).
+ * Dans ce cas, tous les widgets qui auront Ã©tÃ© insÃ©rÃ©s avec la valeur expand=TRUE se partageront tout l'espace libre de la GtkBox
+ * (les widgets avec expand=FALSE n'utiliseront que l'espace qui leur est nÃ©cessaire).
  */
 typedef struct
 {
     widg box;        // le box
     gchar type;    // type horizontal ou vertical
-    gint homogene; // l'homogénéité des fils du box ( true or false)
+    gint homogene; // l'homogÃ©nÃ©itÃ© des fils du box ( true or false)
     gint spacing; // nombre de pixles entre les fils du box
     gint bordure_taille; //taille de bordure dans le box
     color_widg *color; //couleur du box
     dimension D;
+    coordonnees C;
 }MonBox;
 
 /*************************************************************
@@ -268,7 +279,7 @@ typedef struct
                    MonBox et de l'initaliser
 *************************************************************/
 MonBox*Init_box(GtkWidget*pere,gchar*titre,gchar type,gint homo,dimension dim,
-                gint spacing,gint border,color_widg *couleur)
+                gint spacing,gint border,color_widg *couleur,coordonnees cord)
 {
     MonBox*B=NULL;//declaration du pointeur de type MonBox
     //allocation de la memoire de B
@@ -298,6 +309,7 @@ MonBox*Init_box(GtkWidget*pere,gchar*titre,gchar type,gint homo,dimension dim,
             (B->color)=NULL;
         }
         B->D=dim;
+        B->C=cord;
     return ((MonBox*)B);
 
 }//fin
@@ -305,10 +317,10 @@ MonBox*Init_box(GtkWidget*pere,gchar*titre,gchar type,gint homo,dimension dim,
 /*************************************************************
  La fonction : creer_Box
  Entree :Un pointeur vers la structure MonBox
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable B (MonBox)
- Description : Cette fonction permet de créer une Box en
-Fonction des paramètres récupérés de la structure MonBox
+ Description : Cette fonction permet de crÃ©er une Box en
+Fonction des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure MonBox
 *************************************************************/
 MonBox*creer_Box(MonBox*B)
 {
@@ -336,7 +348,7 @@ MonBox*creer_Box(MonBox*B)
 /*************************************************************
  La fonction : ajouter_Box
  Entree :Un pointeur vers la structure MonBox
-           initialisée et cree
+           initialisÃ©e et cree
          un pointeur sur un element (fils) qui sera
            inserer dans le box
          un boolean (fill)   : (1) le fils peut remplir son espace complet, 0 non
@@ -357,6 +369,112 @@ MonBox *ajouter_Box(MonBox*B,GtkWidget*fils,gboolean fill,gboolean expend,int pa
 }//fin
 
 
+
+///************************************************GRID*************************************************///
+///**********************************************************************************************///
+///**********************************************************************************************///
+///**********************************************************************************************///
+
+
+
+typedef struct
+{
+    widg Grid;
+    coordonnees C;
+
+}Mongrid;
+
+
+/*************************************************************
+ La fonction : init_creer_Grid
+ -EntrÃ©es : titre du Grid
+ conteneur du Grid
+ -Sortie : La structure widg (grid) aprÃ¨s initialisation et crÃ©ation
+ -Description : Cette fonction permet dâ€™allouer de lâ€™espace mÃ©moire pour
+ notre variable de type widg (grid), lâ€™initialisÃ© et le crÃ©Ã©
+*************************************************************/
+widg *init_creer_Grid(gchar*titre,GtkWidget*conteneur,coordonnees cord)
+{
+ //pointeur sur un grid, allocation de la mÃ©moire
+ Mongrid *grid=(Mongrid *) malloc(sizeof(Mongrid)) ;
+ //vÃ©rifier lâ€™allocation
+ test_allocation(grid, "grid") ;
+ if(titre){// affecter un titre a notre grid sâ€™il existe
+ grid->Grid.titre=(gchar*) malloc(50*sizeof ((titre))) ;
+ test_allocation(grid, "titre grid") ;
+ gtk_widget_set_name(grid->Grid.elem,titre) ;
+ }
+ else grid->Grid.titre=NULL;
+ grid->Grid.elem=gtk_grid_new() ;//crÃ©er un grid
+ if(conteneur)
+ grid->Grid.conteneur=conteneur ;//lâ€™affecter son conteneur
+ else grid->Grid.conteneur=NULL;
+ //ajouter le grid dans son conteneur
+ if(grid->Grid.conteneur)
+ gtk_container_add(GTK_CONTAINER(grid->Grid.conteneur),grid->Grid.elem) ;
+ return (Mongrid*)grid ;
+}//fin
+
+
+
+
+
+
+/*************************************************************
+La fonction : ajouter_Grid_pos
+Entree :Un pointeur vers la structure widg
+ initialisÃ©e
+ un pointeur sur un Ã©lÃ©ment(fils) a ajoutÃ© dans le grid
+ coordonnÃ©es du fils
+ dimension du fils
+Sortie : Un pointeur vers la variable grid (widg)
+Description : Cette fonction permet lâ€™ajout dâ€™un Ã©lÃ©ment (widget)
+dans un grid Ã  lâ€™aide de ses coordonnÃ©es
+*************************************************************/
+widg *ajouter_Grid_pos(widg *grid,GtkWidget*fils,coordonnees filsCrd,
+ dimension filsDim)
+{
+ //attacher le fils au grid
+ gtk_grid_attach(GTK_GRID(grid->elem),fils,filsCrd.x,
+ filsCrd.y,filsDim.width,filsDim.height) ;
+ return (widg*)grid ;
+}//fin
+
+
+
+/*************************************************************
+La fonction : ajouter_Grid_cote_de
+Entree :Un pointeur vers la structure widg
+ initialisÃ©e
+ un pointeur sur un Ã©lÃ©ment(fils) a ajoutÃ© dans le grid
+ un pointeur sur un fils du grid (dÃ©jÃ  ajouter dans le grid)
+ un positionnement (side) :
+ { GTK_POS_LEFT,(Ã  gauche)
+ GTK_POS_RIGHT,(a droit)
+ GTK_POS_TOP, (en haut)
+ GTK_POS_BOTTOM (en bas) }
+ dimension du fils
+Sortie : Un pointeur vers la variable grid (widg) aprÃ¨s lâ€™ajout
+Description : Cette fonction permet lâ€™ajout dâ€™un Ã©lÃ©ment (fils)
+dans un grid a cote dâ€™un autre Ã©lÃ©ment dans le grid (frÃ¨re) selon
+un positionnement donne (side).
+si (frÃ¨re nâ€™est pas dans le grid (NULL)) lâ€™Ã©lÃ©ment sera ajouter au dÃ©but du
+grid
+*************************************************************/
+widg *ajouter_Grid_cote_de(widg *grid,GtkWidget*fils,
+ GtkWidget *frere,GtkPositionType side,dimension filsDim)
+{
+ gtk_grid_attach_next_to(GTK_GRID(grid->elem),fils,frere,side,filsDim.width,filsDim.height) ;
+ return (widg*)grid ;
+}
+
+
+
+
+
+
+
+
 ///-------------------------------------BUTTON-----------------------------------------------------------------------------------
 ///****************************************************************************************************************
 ///************************************************************************************************************
@@ -375,6 +493,7 @@ typedef struct
     dimension dim; //dimension du bouton
     gint mnemo;//la creation du button(mnemonic/label)
     color_widg *color; //couleur de button
+    coordonnees C;
 }MonBouton;
 
 /**********************************************************
@@ -398,7 +517,7 @@ La fonction : init_button
 
 MonBouton *init_Button(GtkWidget *mere, gchar *url1,gchar *url2,
                        dimension D,gchar*tit, GtkWidget*conte,gint type,
-                        gint mnemo,color_widg *couleur)
+                        gint mnemo,color_widg *couleur,coordonnees cord)
 {
     MonBouton*B;
     //allocation de la memoire pour le bouton
@@ -443,6 +562,7 @@ if(conte)
         else{
             (B->color)=NULL;
         }
+        B->C=cord;
 
     // return le bouton
     return ((MonBouton*)B);
@@ -650,124 +770,257 @@ void ajouter_icon_button(gchar* url,MonBouton *B)
 }
 
 
-/**  Les macros du menu   **/
 
 
-///---------------------------------------------------------------------------------------------------------------------------
-///-------------------------------------------    Menu   -----------------------------------------------------------------------------
-///-------------------------------------------------------------------------------------------------------------------------
-///****************************************************************************************************************
-///************************************************************************************************************
-///************************************************************************************************************
+///******************************************SPIN BUTTON*************************************///
+///*****************************************************************************************///
+///*****************************************************************************************///
+
+typedef struct
+{
+    GtkWidget *SpinButton;//SpinButton
+    gdouble min;//la valeur minimale
+    gdouble max;//la valeur maximale
+    gdouble step;//le pas
+    gdouble value;//valeur par defaut
+    gint height; //Hauteur du SpinButton
+    gint width; //Longueur du SpinButton
+    gint wrap;//0:FALSE , 1:TRUE
+    gint digits;//nombre de chiffres en partie dÃ©cimale
+    gint numeric;//0:FALSE(tapez de caracteres en generale) , 1:TRUE(juste les chiffres)
+    gint arrondissement;//0:FALSE , 1:TRUE
+    color_widg *bgcolor;//background color
+    coordonnees C;
+
+}MonSpin;
+
+
+/*********************Macros ********************************/
+
+/**
+    fonction: init_spin_button
+    entreÃ©s :
+               gdouble val_min   :indique la valeur minimale du spin button
+               gdouble val_max   :indique la valeur maximale du spin button
+               gdouble pas       :indique le pas d'incrÃ©mentation ou dÃ©crÃ©mentation
+               gdouble val_defaut:indique la valeur par dÃ©faut du spin button
+               gint height       :indique la longueur du spin button
+               gint width        :indique la largeur du spinbutton
+               gint wrap         :indique la possibilitÃ© de revient Ã  la limite opposÃ©e lorsque la limite
+                                  supÃ©rieure ou infÃ©rieure de la place est dÃ©passÃ©e(1:TRUE,0:FALSE)
+               gint digits       :indique le nombre de chiffres en partie dÃ©cimale
+               gint numeric      :indique possibilitÃ© d'Ã©crire juste les chiffres (1:TRUE),ou Ecrire tous caractÃ¨res(0:FALSE)
+               gint arrondis     :indique possibilitÃ© d'arrondissement(1:TRUE,0:FALSE)
+    sorties :
+               SpinButton bien initialisÃ©
+    Description:
+                Cette fonction permet d'initialiser spinbutton et l'affecte des caractÃ©ristique
+*/
+MonSpin * init_spin_button(gdouble val_min    , gdouble val_max , gdouble pas,
+                                    gdouble val_defaut ,gint height, gint width, gint wrap ,
+                                    gint digits ,gint numeric  , gint arrondis,color_widg *bgcolor,
+                                    coordonnees cord)
+{
+
+    MonSpin *Sb = NULL;
+    //allocation mÃ©moire
+    Sb =(MonSpin*)malloc(sizeof(MonSpin));
+
+    //test d'allocation
+    test_allocation(Sb,"spin");
+    //allocation rÃ©ussi
+    //Initialisation
+    Sb->min = val_min ;
+    Sb->max =val_max ;
+    Sb->step = pas;
+    Sb->value =val_defaut;
+    Sb->height = height;
+    Sb->width =width ;
+    Sb->wrap = wrap;
+    Sb->digits = digits;
+    Sb->numeric = numeric;
+    Sb->arrondissement =arrondis;
+    //Sb->bgcolor->color =NULL;
+    //color
+    if(bgcolor)
+    {
+        Sb->bgcolor= (color_widg*)malloc(sizeof (color_widg));
+        Sb->bgcolor->color = (gchar*)malloc(30*sizeof(gchar));
+        strcpy(Sb->bgcolor->color , bgcolor->color);
+        Sb->bgcolor->opacity= bgcolor->opacity ;
+    }
+
+   Sb->C=cord;
+
+    return ((MonSpin*)Sb);
+}
+
+/*************************CrÃ©ation********************/
+/**
+    fonction:   create_spin_button
+    entreÃ©s :
+                SpinButtonObjet *Sb:indique notre spinbutton object Ã  crÃ©er
+    sorties :
+                SpinButton bien crÃ©e
+    desciprion:
+                cette fonction sert a crÃ©er spinbutton en utilisant des fonctions de base sur ses caractÃ©ristiques
+*/
+void create_spin_button(MonSpin* Sb )
+
+{
+
+    //L'intervalle du SpinButton avec le pas
+    if((Sb->max) >= (Sb->min))
+    {
+        Sb->SpinButton =gtk_spin_button_new_with_range(Sb->min,Sb->max,Sb->step);
+        //Valeur par defaut
+        gtk_spin_button_set_value( GTK_SPIN_BUTTON(Sb->SpinButton) ,Sb->value);
+
+        //largeur et hauteur
+        if( (Sb->height >0)&&(Sb->width > 0) )
+
+            gtk_widget_set_size_request(GTK_WIDGET(Sb->SpinButton),Sb->width ,Sb->height);
+        else
+            printf("Height & Width should be positivs\n");
+
+        //digits
+        if(Sb->digits >=0 )
+            gtk_spin_button_set_digits(GTK_SPIN_BUTTON(Sb->SpinButton) , Sb->digits);
+        else
+            printf("\nDigits should be positive\n");
+
+        //Wrap
+        if(Sb->wrap == 1)
+            gtk_spin_button_set_wrap (GTK_SPIN_BUTTON(Sb->SpinButton) , TRUE);
+
+        //Numeric
+        if(!(Sb->numeric))
+            gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(Sb->SpinButton) , FALSE);
+
+        //Arrondissement
+        if(Sb->arrondissement == 1)
+            gtk_spin_button_set_snap_to_ticks(GTK_SPIN_BUTTON(Sb->SpinButton) , TRUE);
+
+        //color
+        add_bgcolor(GTK_WIDGET(Sb->SpinButton) ,Sb->bgcolor->color,Sb->bgcolor->opacity);
+
+    }
+
+    else
+    {
+        printf("\nIntervalle du SpinButton n'est pas correct\n");
+        exit(0);
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///********************************************************SCALE************************************************///
+///**************************************************************************************************************///
+///*************************************************************************************************************///
+
 
 
 typedef struct
 {
-    GtkWidget *barre; ///la barre de menu elle-même
-    GtkWidget *menu; ///la partie déroulante qui contient les différentes éléments
-    GtkWidget *ptr_menu;///c'est sur ce widget que l'utilisateur clique pour lancer une action
-    GtkWidget  *conteneur; /// le conteneur
-    gchar* titre;
-}MonMenu;
+    widg scale;             // objet scale
+    GtkOrientation type;    // type de scale : H ou V
+    GtkPositionType posDig;// le position dans laquelle la valeur actuelle est afficher
+    gdouble Min;          // valeur minimale
+    gdouble Max;         //valeur maximale
+    gdouble step;       //le pas de deplacement
+    gint domDig;
+    coordonnees C;       // domain des valeur (1:reels,0:entiers)
+}MonScale;
 
 
-///********************************/
-/// Ajouter couleur
 
-void color_menu(MonMenu* M,int choix,color_widg* C)
+/*************************************************************
+  La fonction : init_scale
+  -Entrees :  pere ou conteneur du scale
+      titre du scale
+      type du scale :
+         GTK_ORIENTATION_VERTICAL
+         GTK_ORIENTATION_HORIZONTAL
+      un positionnement de la valeur du Scale (posD):
+           { GTK_POS_LEFT,(Ã  gauche)
+           GTK_POS_RIGHT,(a droit)
+           GTK_POS_TOP, (en haut)
+           GTK_POS_BOTTOM (en bas) }
+      un entier (domD): determinant le domain des pas soit des reels (1)
+           ou des entiers (0)
+  -Sortie: La structure MonScale apres initialisation
+  -Description: Cette fonction permet d'allouer de l'espace memoire pour notre variable de type
+                   MonScale et de l'initaliser
+*************************************************************/
+MonScale *init_scale(GtkWidget*pere,gchar*titre,GtkOrientation type,
+                     GtkPositionType posD,gdouble min,gdouble max,gdouble step,gint domD,
+                     coordonnees cord)
 {
-  if(C)
-  {
-  switch(choix)
-  {
-      case 1 : add_bgcolor(M->ptr_menu,C->color,C->opacity);   break; /// colorer la tete du menu
-
-      case 2 : add_bgcolor(M->menu,C->color,C->opacity);break; ///colorer les élements du menu
-      case 3 :add_bgcolor(M->ptr_menu,C->color,C->opacity); /// les deux
-              add_bgcolor(M->menu,C->color,C->opacity); break;
-  }
-
-  }
-}
-
-/**************************/
-///initialiser menu
- MonMenu* init_menu(gchar*label,GtkWidget *cont)
-{
-    MonMenu* menu;
-    //allocation de la memoire pour le menu
-   menu=(MonMenu*)malloc(sizeof(MonMenu));
-    test_allocation(menu,"menu");
-    if(label){
-        menu->titre= (gchar*)malloc(30*sizeof(gchar));
-        test_allocation( menu->titre,"titre menu");
-        strcpy(menu->titre,label);
-             }
-             if(cont)
-    menu->conteneur=cont;
-    else menu->conteneur=NULL;
-return (MonMenu*) menu;
-}
-
-
-/// creer menu
-///****************************************************************************************************************
-///************************************************************************************************************
-///************************************************************************************************************
-void Creer_Menu(MonMenu* monMenu)
-{
-    monMenu->barre=gtk_menu_bar_new();
-    monMenu->menu=gtk_menu_new();
-    monMenu->ptr_menu=gtk_menu_item_new_with_label(monMenu->titre);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(monMenu->ptr_menu),monMenu->menu); /// attacher
-    gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->barre), monMenu->ptr_menu); /// insertion du menu dans la barre
-if(monMenu->conteneur)
-   gtk_container_add(GTK_CONTAINER(monMenu->conteneur),monMenu->barre);
-
-}
-
-/// creer un menu dans une barre spécifique
-///****************************************************************************************************************
-///************************************************************************************************************
-///************************************************************************************************************
-void Creer_Menu_barre(GtkWidget* barre,MonMenu* monMenu)
-{
-    monMenu->barre=barre;
-    monMenu->menu=gtk_menu_new();
-    monMenu->ptr_menu=gtk_menu_item_new_with_label(monMenu->titre);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(monMenu->ptr_menu),monMenu->menu); /// attacher (lier)
-    gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->barre), monMenu->ptr_menu); /// insertion du menu dans la barre
+    //declaration et allocation de la memoire pour un pointeur de type MonScale
+    MonScale* S=(MonScale*) malloc(sizeof (MonScale));
+    test_allocation(S,"scale");//verifier l'allocation
+    if(titre)//affectation du titre s'il existe
+    {
+        S->scale.titre=(gchar*) malloc(maxTitre*sizeof (gchar));
+        test_allocation(S->scale.titre,"titre scale");
+        strcpy(S->scale.titre,titre);
+    }
+    S->scale.conteneur=pere;//affectation du conteneur
+    S->type=type;//affectation du type de scale
+    S->posDig=posD;//affectation du positionnement de la valeur du Scale
+    S->Max=max;//valeur maximale
+    S->Min=min;//valeur minimale
+    S->step=step;//pas de variation
+    S->domDig=domD;//domain des valeurs
+    S->C=cord;
+    return ((MonScale*) S);
+}//fin
+/*************************************************************
+ La fonction : creer_scale
+ Entree :Un pointeur vers la structure MonScale
+           initialisÃ©e
+ Sortie :  Un pointeur vers la variable S apres la creation
+ Description : Cette fonction permet de crÃ©er un Scale en
+Fonction des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure MonScale
+*************************************************************/
+MonScale *creer_scale(MonScale* S)
+{   //creation du scale
+    S->scale.elem=gtk_scale_new_with_range(S->type,S->Min,S->Max,S->step);
+    //determiner le domain des valeurs du Scale
+    gtk_scale_set_digits(GTK_SCALE(S->scale.elem),S->domDig);
+    //determiner le positionnement du valeur par rapport au scale
+    gtk_scale_set_value_pos (GTK_SCALE (S->scale.elem),S->posDig);
+    //affectation du titre au scale s'il existe
+    if(S->scale.titre) gtk_widget_set_name(S->scale.elem,S->scale.titre);
+    return ((MonScale*) S);
+}//fin
 
 
-}
 
-/// ajouter un element dans un menu
-///****************************************************************************************************************
-///************************************************************************************************************
-///************************************************************************************************************
-GtkWidget * Ajouter_elem(MonMenu* monMenu,gchar* label,color_widg * couleur)
-{
- GtkWidget *ptr_item;
-ptr_item= gtk_menu_item_new_with_label(label);
-gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->menu),ptr_item);
-if(couleur) add_bgcolor(ptr_item,couleur->color,couleur->opacity);
-return ptr_item;
-}
 
-/// creer un sous-menu
-///****************************************************************************************************************
-///************************************************************************************************************
-///************************************************************************************************************
-void Creer_sous_menu(MonMenu* menu_principale,MonMenu* Sous_Menu)
-{
 
-    Sous_Menu->menu=gtk_menu_new();
 
-   Sous_Menu->ptr_menu=gtk_menu_item_new_with_label(Sous_Menu->titre);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(Sous_Menu->ptr_menu),Sous_Menu->menu);
 
-     gtk_menu_shell_append(GTK_MENU_SHELL(Sous_Menu->conteneur), Sous_Menu->ptr_menu ); /// insertion du sous menu dans le menu principale
-}
+
+
+
+
 
 
 
@@ -787,10 +1040,11 @@ typedef struct
 
  dimension d;
  color_widg *couleur;
+ coordonnees C;
 }Monfixed;
 
 
-Monfixed *init_Fixed(dimension D,gchar*titre,GtkWidget*conten,color_widg *couleur)
+Monfixed *init_Fixed(dimension D,gchar*titre,GtkWidget*conten,color_widg *couleur,coordonnees cord)
 {
     Monfixed*F=NULL;
 
@@ -817,6 +1071,7 @@ Monfixed *init_Fixed(dimension D,gchar*titre,GtkWidget*conten,color_widg *couleu
             F->couleur=NULL;
         }
         F->d=D;
+        F->C=cord;
     return((Monfixed*)F);
 
 }
@@ -847,6 +1102,189 @@ Monfixed *ajouter_Fixed(Monfixed *F,GtkWidget *fils,coordonnees C)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/**  Les macros du menu   **/
+
+
+///---------------------------------------------------------------------------------------------------------------------------
+///-------------------------------------------    Menu   -----------------------------------------------------------------------------
+///-------------------------------------------------------------------------------------------------------------------------
+
+
+typedef struct
+{
+    GtkWidget *barre; ///la barre de menu elle-mÃªme
+    GtkWidget *menu; ///la partie dÃ©roulante qui contient les diffÃ©rentes Ã©lÃ©ments
+    GtkWidget *ptr_menu;///c'est sur ce widget que l'utilisateur clique pour lancer une action
+    GtkWidget  *conteneur; /// le conteneur
+    gchar* titre;
+}MonMenu;
+
+
+
+
+/// Structure de position d'un Ã©lement menu
+typedef struct
+{
+/// Emplacement
+   int x1;
+   int x2;
+ /// Niveau d'emplacement
+   int y1;
+   int y2;
+}place_elem;
+
+
+///********************************************************************************************/
+/// Ajouter couleur
+
+void color_menu(MonMenu* M,int choix,color_widg* C)
+{
+  if(C)
+  {
+  switch(choix)
+  {
+      case 1 : add_bgcolor(M->ptr_menu,C->color,C->opacity);   break; /// colorer la tete du menu
+      case 2 : add_bgcolor(M->menu,C->color,C->opacity);break; ///colorer les Ã©lements du menu
+      case 3 :add_bgcolor(M->ptr_menu,C->color,C->opacity); /// les deux
+              add_bgcolor(M->menu,C->color,C->opacity); break;
+  }
+
+  }
+}
+
+/**************************************************************************/
+///initialiser menu
+ MonMenu* init_menu(gchar*label,GtkWidget *cont)
+{
+    MonMenu* menu;
+    //allocation de la memoire pour le menu
+   menu=(MonMenu*)malloc(sizeof(MonMenu));
+    test_allocation(menu,"menu");
+    if(label){
+        menu->titre= (gchar*)malloc(30*sizeof(gchar));
+        test_allocation( menu->titre,"titre menu");
+        strcpy(menu->titre,label);
+             }
+   if(cont)
+        menu->conteneur=cont;
+return (MonMenu*) menu;
+}
+
+/******************************************************************************/
+/// creer menu
+void Creer_Menu(MonMenu* monMenu)
+{
+    monMenu->barre=gtk_menu_bar_new();
+    monMenu->menu=gtk_menu_new();
+    monMenu->ptr_menu=gtk_menu_item_new_with_label(monMenu->titre);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(monMenu->ptr_menu),monMenu->menu); /// attacher
+    gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->barre), monMenu->ptr_menu); /// insertion du menu dans la barre
+if(monMenu->conteneur)
+   gtk_container_add(GTK_CONTAINER(monMenu->conteneur),monMenu->barre);
+
+}
+/*************************************************************************************/
+/// creer un menu dans une barre spÃ©cifique
+void Creer_Menu_barre(GtkWidget* barre,MonMenu* monMenu)
+{
+    monMenu->barre=barre;
+    monMenu->menu=gtk_menu_new();
+    monMenu->ptr_menu=gtk_menu_item_new_with_label(monMenu->titre);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(monMenu->ptr_menu),monMenu->menu); /// attacher
+    gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->barre), monMenu->ptr_menu); /// insertion du menu dans la barre
+
+
+}
+/**************************************************************************************/
+/// ajouter un element menu
+
+GtkWidget * Ajouter_elem(MonMenu* monMenu,gchar* label,color_widg * couleur,place_elem* pos )
+{
+ GtkWidget *ptr_item;
+ptr_item= gtk_menu_item_new_with_label(label);
+if(!pos) gtk_menu_shell_append(GTK_MENU_SHELL(monMenu->menu),ptr_item);
+else gtk_menu_attach (GTK_MENU(monMenu->menu),ptr_item,pos->x1,pos->x2,pos->y1,pos->y2);
+if(couleur) add_bgcolor(ptr_item,couleur->color,couleur->opacity);
+return ptr_item;
+}
+
+/************************************************************************************************/
+/// Ajouter un sous-menu
+void Ajouter_sous_menu(MonMenu* menu_principale,MonMenu* Sous_Menu,place_elem* pos)
+{
+   Sous_Menu->menu=gtk_menu_new();
+   Sous_Menu->ptr_menu=gtk_menu_item_new_with_label(Sous_Menu->titre);
+   gtk_menu_item_set_submenu(GTK_MENU_ITEM(Sous_Menu->ptr_menu),Sous_Menu->menu);
+   if(Sous_Menu->conteneur)
+    {
+        if(pos) gtk_menu_attach(GTK_MENU(menu_principale->menu),Sous_Menu->ptr_menu,pos->x1,pos->x2,pos->y1,pos->y2);
+        else gtk_menu_shell_append(GTK_MENU_SHELL(Sous_Menu->conteneur), Sous_Menu->ptr_menu ); /// insertion du sous menu dans le menu principale
+    }
+}
+
+///-----------------------------------------------------------------------------------------------------------------/
+typedef struct
+{
+    GtkWidget* barre;
+    GtkWidget * conteneur; /// oÃ¹ tu veut placer la barre
+    color_widg * coleur;
+    coordonnees C;
+}bar_menu;
+///Creer barre menu
+bar_menu* Creer_bar_menu(GtkWidget * cont,color_widg * couleur,coordonnees cord)
+{
+    bar_menu* MaBar=NULL;
+    MaBar=( bar_menu*)malloc(sizeof(bar_menu));
+    test_allocation(MaBar,"barre menu");
+    MaBar->barre=gtk_menu_bar_new();
+    if(cont) MaBar->conteneur=cont;
+    if(couleur) add_bgcolor(MaBar->barre,couleur->color,couleur->opacity);
+    MaBar->C=cord;
+
+
+return (bar_menu*) MaBar;
+}
+
+/// Ajouter  elem barre
+GtkWidget * Ajouter_elm_bar(bar_menu* bar , gchar* label)
+{
+    GtkWidget * elem;
+    elem=gtk_menu_item_new_with_label(label);
+    gtk_container_add(GTK_MENU_BAR(bar->barre),elem);
+ return (GtkWidget *) elem;
+}
+
+/// positionner une barre
+
+ bar_menu* positionner_bar(bar_menu*MaBar,coordonnees c)
+{
+    Monfixed *f;
+    dimension d={20,40}; /// fi ntidar t7aydoha
+f=init_Fixed(d,"fixed",MaBar->conteneur,MaBar->coleur,walo());
+f=creer_Fixed(f);
+f=ajouter_Fixed(f,MaBar->barre,c);
+return  (bar_menu* )MaBar;
+}
+
+
+
+
+
+
+
+
+
 /*****************************************************************************************************
 
                                             GTK_ENTRY
@@ -867,26 +1305,17 @@ typedef struct
 {
 
     GtkWidget *entry; //widget d'une entree.
-
     dimension dim; //dimension du zone d entree
-
     gboolean visible; //le texte est visible ou pas.
-
     gboolean editable; //on peut saisir par clavier.
-
     gboolean frame;//on peut ajouter frame au gtk_entry
-
     const char* text_to_set; //le texte a saisir.
-
     const char* text_to_get;//le texte a recuperer.
-
     gint placeholder;/*0:pas de place holder
                        1:avec place holder*/
-
-
     gchar *titre;
     color_widg *couleur;
-
+    coordonnees C;
 }MonEntry;
 
 /**********************************************************
@@ -902,7 +1331,8 @@ La fonction : init_entry
  ses champs et de la retourner .
 ***********************************************************/
 MonEntry *init_MonEntry(dimension D,gboolean visibilite,gboolean edit,gchar *txt_set,
-                        gchar *txt_get,gchar *tit,gboolean frame,gint placeholder,color_widg*couleur)
+                        gchar *txt_get,gchar *tit,gboolean frame,gint placeholder,
+                        color_widg*couleur,coordonnees cord)
 
 {
 
@@ -945,7 +1375,7 @@ MonEntry *init_MonEntry(dimension D,gboolean visibilite,gboolean edit,gchar *txt
    if(couleur)
     E->couleur=couleur;
    else E->couleur=NULL;
-
+E->C=cord;
     return ((MonEntry*)E);
 
 
@@ -958,11 +1388,11 @@ MonEntry *init_MonEntry(dimension D,gboolean visibilite,gboolean edit,gchar *txt
 
 /**********************************************************
 La fonction : creer_Entry
--Entrees : L : objet entry initialisé
--Sortie : L : Objet label créé
+-Entrees : L : objet entry initialisÃ©
+-Sortie : L : Objet label crÃ©Ã©
 -Description:Cette fonction permet la creation d'un label
- en fct des paramètres récuperés de la structure
- Monlabel initialisée.
+ en fct des paramÃ¨tres rÃ©cuperÃ©s de la structure
+ Monlabel initialisÃ©e.
 ***********************************************************/
 
 
@@ -1016,6 +1446,7 @@ typedef struct
 
     dimension dim; //dimension de la zone texte
     color_widg *couleur;
+    coordonnees C;
 }Monlabel;
 
 
@@ -1035,7 +1466,7 @@ La fonction : init_label
  ses champs et de la retourner .
 ***********************************************************/
 
-Monlabel *init_label(gchar *tit,gchar *texte,GtkWidget *conten,dimension D,color_widg*couleur)
+Monlabel *init_label(gchar *tit,gchar *texte,GtkWidget *conten,dimension D,color_widg*couleur,coordonnees cord)
 
 {
 
@@ -1069,6 +1500,7 @@ if(couleur)
     L->couleur=couleur;
 else L->couleur=NULL;
 L->dim=D;
+L->C=cord;
 return((Monlabel*)L);
 
 }
@@ -1080,11 +1512,11 @@ return((Monlabel*)L);
 
 /**********************************************************
 La fonction : creer_label
--Entrees : L : objet label initialisé
--Sortie : L : Objet label créé
+-Entrees : L : objet label initialisÃ©
+-Sortie : L : Objet label crÃ©Ã©
 -Description:Cette fonction permet la creation d'un label
- en fct des paramètres récuperés de la structure
- Monlabel initialisée.
+ en fct des paramÃ¨tres rÃ©cuperÃ©s de la structure
+ Monlabel initialisÃ©e.
 ***********************************************************/
 
 
@@ -1196,10 +1628,12 @@ MonDialog *init_dialog(GtkWindow *parent , gchar* titre ,gchar* icon ,gint modal
 }//fin
 
 
-///**************************************creer dialog******************
-///****************************************************************************************************************
+
+///**************************************creer dialog**********************************************************
 ///************************************************************************************************************
 ///************************************************************************************************************
+///************************************************************************************************************
+
 
 
 void creer_dialog(MonDialog *D)
@@ -1220,7 +1654,7 @@ void creer_dialog(MonDialog *D)
  gtk_window_set_transient_for(GTK_WINDOW (D->dialog ) , GTK_WINDOW ( D->tran));
  //affecter la dimension
  gtk_widget_set_size_request ( GTK_WIDGET(D->dialog) , D->dim.width ,D->dim.height);
- //si la fenêtre dialogue est modal activer la modalité
+ //si la fenÃªtre dialogue est modal activer la modalitÃ©
  if(D->modal == 1)
  gtk_window_set_modal(GTK_WINDOW(D->dialog) , TRUE);
  else gtk_window_set_modal(GTK_WINDOW(D->dialog) , FALSE);
@@ -1236,33 +1670,33 @@ if(D->couleur)
 
 
 /**
-GTK_RESPONSE_NONE = -1 : La boîte de dialogue a été détruite par
-le gestionnaire de fenêtres ou détruite par programme avec gtk_widget_destroy().
-Ceci est également renvoyé si un widget de réponsen'a pas d'identifiant de réponse
-défini.
-GTK_RESPONSE_REJECT = -2 :Cet identifiant n'est pas associé aux boutons des
-boîtes de dialogue intégrées, mais vous êtes libre de l'utiliser vous-même.
-GTK_RESPONSE_ACCEPT = -3 :Cet identifiant n'est pas associé aux boutons
-des boîtes de dialogue intégrées, mais vous êtes libre de l'utiliser vous-même.
-GTK_RESPONSE_DELETE_EVENT = -4 :Chaque boîte de dialogue est automatiquement
-connectée au signal d'événement de suppression. Pendant que gtk_dialog_run()
-est en cours d'exécution, cet identifiant sera renvoyé et l'événement
-de suppression ne pourra plus détruire la fenêtre comme d'habitude.
-GTK_RESPONSE_OK = -5 : un bouton GTK_STOCK_OK a été cliqué dans
-une boîte de dialogue intégrée. Vous êtes libre d'utiliser
-ce bouton ou l'un des suivants dans vos propres boîtes de dialogue.
+GTK_RESPONSE_NONE = -1 : La boÃ®te de dialogue a Ã©tÃ© dÃ©truite par
+le gestionnaire de fenÃªtres ou dÃ©truite par programme avec gtk_widget_destroy().
+Ceci est Ã©galement renvoyÃ© si un widget de rÃ©ponsen'a pas d'identifiant de rÃ©ponse
+dÃ©fini.
+GTK_RESPONSE_REJECT = -2 :Cet identifiant n'est pas associÃ© aux boutons des
+boÃ®tes de dialogue intÃ©grÃ©es, mais vous Ãªtes libre de l'utiliser vous-mÃªme.
+GTK_RESPONSE_ACCEPT = -3 :Cet identifiant n'est pas associÃ© aux boutons
+des boÃ®tes de dialogue intÃ©grÃ©es, mais vous Ãªtes libre de l'utiliser vous-mÃªme.
+GTK_RESPONSE_DELETE_EVENT = -4 :Chaque boÃ®te de dialogue est automatiquement
+connectÃ©e au signal d'Ã©vÃ©nement de suppression. Pendant que gtk_dialog_run()
+est en cours d'exÃ©cution, cet identifiant sera renvoyÃ© et l'Ã©vÃ©nement
+de suppression ne pourra plus dÃ©truire la fenÃªtre comme d'habitude.
+GTK_RESPONSE_OK = -5 : un bouton GTK_STOCK_OK a Ã©tÃ© cliquÃ© dans
+une boÃ®te de dialogue intÃ©grÃ©e. Vous Ãªtes libre d'utiliser
+ce bouton ou l'un des suivants dans vos propres boÃ®tes de dialogue.
 GTK_RESPONSE_CANCEL = -6 :
-un bouton GTK_STOCK_CANCEL a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_CANCEL a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_CLOSE = -7 :
-un bouton GTK_STOCK_CLOSE a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_CLOSE a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_YES = -8 :
-un bouton GTK_STOCK_YES a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_YES a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_NO = -9 :
-un bouton GTK_STOCK_NO a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_NO a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_APPLY = -10 :
-un bouton GTK_STOCK_APPLY a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_APPLY a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_HELP = -11 :
-un bouton GTK_STOCK_HELP a été cliqué dans une boîte de dialogue intégrée
+un bouton GTK_STOCK_HELP a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e
 
 
 
@@ -1283,6 +1717,78 @@ void ajouter_content_area(MonDialog *D,GtkWidget *elem)
 {
     gtk_box_pack_start(D->content_area,elem,0,0,0);
 }
+
+
+///***************COMBOBOX********************///
+///*******************************************************************
+///*******************************************************************
+///*******************************************************************
+
+
+
+
+
+//-------------------- HE WE GO --------------------
+typedef struct {
+    widg combo;
+    dimension dim;
+    coordonnees Crd;
+    gint type;
+}MonComboBox;
+//INNITIALISATION
+MonComboBox*init_comboBox(GtkWidget*cont,gchar*titre,dimension dim,coordonnees Crd,gint type)
+{
+    MonComboBox *Comb=(MonComboBox*)malloc(sizeof (MonComboBox));
+    test_allocation(Comb,"combo");
+    Comb->combo.titre=NULL;
+    Comb->combo.conteneur=NULL;
+    if(titre)
+    {
+        Comb->combo.titre=(gchar*) malloc(maxTitre*sizeof (gchar));
+        test_allocation(Comb->combo.titre,"titre combo");
+        strcpy(Comb->combo.titre,titre);
+    }
+    Comb->dim=dim;
+    Comb->Crd=Crd;
+    Comb->type=type;//1 un combo des textes suelement, sinon un combo des textes avec entry
+    if(cont) Comb->combo.conteneur=cont;
+    return (MonComboBox*)Comb;
+}
+//CREATION
+MonComboBox*creer_comboBox(MonComboBox*comb)
+{
+    if(comb->type==1)comb->combo.elem=gtk_combo_box_text_new ();
+    else comb->combo.elem=gtk_combo_box_text_new_with_entry ();
+    if(comb->combo.conteneur)
+        gtk_container_add (GTK_CONTAINER (comb->combo.conteneur), comb->combo.elem);
+    if(comb->combo.titre)  gtk_widget_set_name(comb->combo.elem,comb->combo.titre);
+    return (MonComboBox*)comb;
+}
+//AJOUTER UN TEXTE
+MonComboBox*ajouter_string_comboBox(MonComboBox*comb,gchar*element)
+{
+    if(element)
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(comb->combo.elem),element);
+    return (MonComboBox*)comb;
+}
+//ajouter un nombre (example les jours du mois)
+MonComboBox*ajouter_number_comboBox(MonComboBox*comb,gdouble num)
+{
+    gchar element[10];
+    sprintf(element, "%.0f", num);
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(comb->combo.elem),element);
+    return (MonComboBox*)comb;
+}
+
+
+
+
+
+
+
+
+
+
 
 
                        ///fonction de signal///
@@ -1308,6 +1814,189 @@ static quitter(GtkWidget *dialog,gint resp,gpointer data)
 
 
 
+
+///*****************************************Scroll bare*************************************************///
+///**********************************************************************************************
+///************************************************************************************************
+///****************************************************************************************************
+
+
+typedef struct {
+    GtkWidget *swin;
+    GtkWidget *cont;//generalement un window mais peut etre un box
+    GtkWidget *contFils;// grid generalement ou fixed
+    gint borderWidth;
+    dimension dim;
+}MonScroll;
+/*****************************TREEEEES IMPORTANT****************************
+ remember dim of contFils bigger than swin and swin dim equal or less than cont
+ ****************************FIN D'IMPORTANCE****************************/
+
+
+
+
+
+
+///initialisation*********************************************
+
+
+
+MonScroll *init_Scroll(GtkWidget *cont,  GtkWidget *contFils,gint brW,dimension dim)
+{
+    MonScroll *scroll= (MonScroll*)malloc(sizeof (MonScroll));
+    test_allocation(scroll,"scorll");
+    //initialisation des donnees par defaut
+    scroll->cont=NULL;
+    scroll->contFils=NULL;
+    scroll->borderWidth=0;
+    scroll->dim.height=scroll->dim.width=100;
+    //verifications des entrees et affectation
+    if(cont) scroll->cont=cont;
+    if(contFils) scroll->contFils=contFils;
+    if(brW>0) scroll->borderWidth=brW;
+    if(dim.width>100) scroll->dim.width= dim.width;
+    if(dim.height>100) scroll->dim.height= dim.height;
+    return (MonScroll *)scroll;
+}
+
+
+
+///creation**********************************************
+
+
+
+MonScroll *creer_Scroll(MonScroll *scroll)
+{
+    //creation du scroll
+    scroll->swin=gtk_scrolled_window_new (NULL, NULL);
+    if(scroll->cont)
+    {   // affectation du scroll au widget parent
+        gtk_container_add (GTK_CONTAINER (scroll->cont), scroll->swin);
+    }
+    //affectation du taille de la bordure
+    gtk_container_set_border_width (GTK_CONTAINER (scroll->swin), scroll->borderWidth);
+    if(scroll->contFils)
+    {   //affectation du widget conteneur fils
+        gtk_container_add(GTK_CONTAINER(scroll->swin), scroll->contFils);
+    }
+    //affectation de la taille du scroll
+    gtk_widget_set_size_request (scroll->swin, scroll->dim.width, scroll->dim.height);
+    return (MonScroll *)scroll;
+}
+
+
+
+
+
+
+
+
+typedef struct {
+ widg frame; // le cadre
+ GtkShadowType shadow_type;//le type de lâ€™ombre
+ float label_xalign; /*lâ€™alignement x de lâ€™Ã©tiquette le long du bord
+ supÃ©rieur du widget*/
+ float label_yalign; //lâ€™alignement y de lâ€™Ã©tiquette
+ dimension dim; //dimension du cadre
+ coordonnees C;
+}MonFrame;
+
+
+
+
+
+/*************************************************************
+ La fonction : init_Frame
+ -Entrees : titre du cadre
+ Chtype: indique le type du contour du cadre
+ GTK_SHADOW_NONE
+ GTK_SHADOW_IN
+ GTK_SHADOW_OUT
+ GTK_SHADOW_ETCHED_IN
+ GTK_SHADOW_ETCHED_OUT
+ label_xalign: indique lâ€™alignement de lâ€™Ã©tiquette au bord supÃ©rieur.
+ La valeur 0.0 reprÃ©sente lâ€™alignement Ã  gauche,
+ la valeur 1.0 reprÃ©sente lâ€™alignement Ã  droite.
+ label_yalign: indique lâ€™alignement y de lâ€™Ã©tiquette.
+ La valeur 0.0 sâ€™aligne sous le cadre,
+la valeur 1.0 sâ€™aligne au-dessus du cadre
+ cont: pointeur sur le conteneur du cadre.
+ dim: dimention de notre cadre {width,hieght}
+ C: coordonnees de notre cadre
+ -Sortie: La structure MonFrame apres initialisation
+ -Description: Cette fonction permet d'allouer de l'espace memoire pour
+ notre variable de type MonFrame et de l'initaliser
+*************************************************************/
+MonFrame *init_Frame(GtkWidget*cont,dimension dim,
+ float xalign,float yalign,gchar*titre,GtkShadowType Chtype,coordonnees cord)
+{
+ MonFrame * F;
+ //allocation de la memoire pour l element
+ F=(MonFrame *)malloc(sizeof(MonFrame));
+ test_allocation(F,"Frame");
+ if(titre)
+ {
+ //allocation de la memoire pour le titre
+ F->frame.titre= (gchar*)malloc(30*sizeof(gchar));
+ test_allocation( F->frame.titre,"titre Frame");
+ //initialisation du titre
+ strcpy( F->frame.titre,titre);
+ }
+ F->shadow_type=Chtype;//initialisation du type de contour
+ F->label_xalign=xalign;//initialisation de lalignement x de l'etiquette
+ F->label_yalign=yalign;//initialisation de lalignement y de l'etiquette
+
+ F->dim=dim;// initialisation du dimention
+ F->frame.conteneur=cont;//initialisation du conteneur du cadre
+ F->C=cord;
+ return ((MonFrame *)F);
+}//fin
+
+/**********************************************************
+La fonction : creer_Frame
+-Entrees : L : objet MonFrame initialise
+-Sortie : L : Objet MonFrame cree
+-Description:Cette fonction permet la creation d'un cadre
+en fonction des parametres recuperes de la structure
+MonFrame initialisee.
+***********************************************************/
+MonFrame *creer_Frame(MonFrame *F)
+{
+ F->frame.elem = gtk_frame_new(F->frame.titre);//affecter le titre
+ //affecter lalignement de l'etiquette
+ gtk_frame_set_label_align(GTK_FRAME(F->frame.elem),F->label_xalign,F->label_yalign);
+ //affecter le type de contour
+ gtk_frame_set_shadow_type(GTK_FRAME(F->frame.elem),F->shadow_type);
+ //affecter la dimension si elle positive (existe)
+ if((F->dim.height)>0 && (F->dim.width)>0)
+ gtk_widget_set_size_request(F->frame.elem,F->dim.width, F->dim.height);
+ //mettre le cadre dans son conteneur
+ gtk_container_add(GTK_CONTAINER(F->frame.conteneur),F->frame.elem);
+ return((MonFrame *)F);
+}//fin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///   fonction de signal
 
 
@@ -1322,30 +2011,30 @@ color_widg couleur1={"grey",99},couleur2={"red",99},couleur3={"white",99},couleu
 ///fixed
 Monfixed *fix2=NULL;
 
-fix2=init_Fixed(d6,"fixed secandaire",NULL,NULL);
+fix2=init_Fixed(d6,"fixed secandaire",NULL,NULL,walo());
 fix2=creer_Fixed(fix2);
 MonBox *box1=NULL,*box2=NULL,*box3=NULL,*box4=NULL,*box5=NULL;
 
 
-box4=Init_box(NULL,"sousbox3",'H',0,d2,0,0,&couleur5);
+box4=Init_box(NULL,"sousbox3",'H',0,d2,0,0,&couleur5,walo());
 box4=creer_Box(box4);
 fix2=ajouter_Fixed(fix2,box4->box.elem,c4);
-box5=Init_box(NULL,"sousbox4",'H',0,d4,50,10,NULL);
+box5=Init_box(NULL,"sousbox4",'H',0,d4,50,10,NULL,walo());
 box5=creer_Box(box5);
 fix2=ajouter_Fixed(fix2,box5->box.elem,c5);
 
 
 Monlabel* label=NULL,*label2=NULL,*label3=NULL;
-label3=init_label("label 3","Choose the type of virus ",box4->box.elem,d3,NULL);
+label3=init_label("label 3","Choose the type of virus ",box4->box.elem,d3,NULL,walo());
 label3=creer_label(label3);
 
 MonBouton *bouton1,*bouton2,*bouton3,*bouton4,*bouton5,*bouton6;
 
-bouton4=init_Button(NULL,NULL,NULL,d4,"Coronavirus",NULL,2,0,&couleur3);
+bouton4=init_Button(NULL,NULL,NULL,d4,"Coronavirus",NULL,2,0,&couleur3,walo());
 bouton4=creer_Bouton(bouton4);
-bouton5=init_Button(bouton4->button.elem,NULL,NULL,d4,"Ebolavirus",NULL,2,0,&couleur3);
+bouton5=init_Button(bouton4->button.elem,NULL,NULL,d4,"Ebolavirus",NULL,2,0,&couleur3,walo());
 bouton5=creer_Bouton(bouton5);
-bouton6=init_Button(bouton4->button.elem,NULL,NULL,d4,"Rotavirus",NULL,2,0,&couleur3);
+bouton6=init_Button(bouton4->button.elem,NULL,NULL,d4,"Rotavirus",NULL,2,0,&couleur3,walo());
 bouton6=creer_Bouton(bouton6);
 box5=ajouter_Box(box5,bouton4->button.elem,0,0,0,1);
 box5=ajouter_Box(box5,bouton5->button.elem,0,0,0,1);
@@ -1376,6 +2065,9 @@ static void exiit(GtkWidget *button,gpointer window)
 
 
 
+
+
+
 ///fonction main
 
 int main(int argc, char *argv[])
@@ -1397,7 +2089,7 @@ F=creer_Window(F);
 
 ///fixed
 Monfixed*fix=NULL,*fix2=NULL;
-fix=init_Fixed(d6,"fixed pricipale",F->window,NULL);
+fix=init_Fixed(d6,"fixed pricipale",F->window,NULL,walo());
 fix=creer_Fixed(fix);
 
 
@@ -1406,33 +2098,33 @@ fix=creer_Fixed(fix);
 
 ///box
 MonBox *box1=NULL,*box2=NULL,*box3=NULL,*box4=NULL,*box5=NULL;
-box1=Init_box(NULL,"sousbox1",'H',0,d2,0,0,&couleur2);
+box1=Init_box(NULL,"sousbox1",'H',0,d2,0,0,&couleur2,walo());
 box1=creer_Box(box1);
-box2=Init_box(NULL,"sousbox2",'H',0,d2,0,0,NULL);
+box2=Init_box(NULL,"sousbox2",'H',0,d2,0,0,NULL,walo());
 box2=creer_Box(box2);
 fix=ajouter_Fixed(fix,box1->box.elem,c1);
 fix=ajouter_Fixed(fix,box2->box.elem,c2);
-box3=Init_box(NULL,"sousbox2",'H',0,d4,50,10,&couleur1);
+box3=Init_box(NULL,"sousbox2",'H',0,d4,50,10,&couleur1,walo());
 box3=creer_Box(box3);
 fix=ajouter_Fixed(fix,box3->box.elem,c3);
 
 
 ///label
 Monlabel* label=NULL,*label2=NULL,*label3=NULL;
-label=init_label("label principale","WELCOME",box1->box.elem,d3,NULL);
+label=init_label("label principale","WELCOME",box1->box.elem,d3,NULL,walo());
 label=creer_label(label);
 
-label2=init_label("label 2","the spread of a virus",box2->box.elem,d3,NULL);
+label2=init_label("label 2","the spread of a virus",box2->box.elem,d3,NULL,walo());
 label2=creer_label(label2);
 
 ///bouton
 
 MonBouton *bouton1,*bouton2,*bouton3,*bouton4,*bouton5,*bouton6;
-bouton1=init_Button(NULL,NULL,NULL,d4,"Exit",NULL,4,0,&couleur3);
+bouton1=init_Button(NULL,NULL,NULL,d4,"Exit",NULL,4,0,&couleur3,walo());
 bouton1=creer_Bouton(bouton1);
-bouton2=init_Button(NULL,NULL,NULL,d4,"Play",NULL,4,0,&couleur3);
+bouton2=init_Button(NULL,NULL,NULL,d4,"Play",NULL,4,0,&couleur3,walo());
 bouton2=creer_Bouton(bouton2);
-bouton3=init_Button(NULL,NULL,NULL,d4,"Continue",NULL,4,0,&couleur3);
+bouton3=init_Button(NULL,NULL,NULL,d4,"Continue",NULL,4,0,&couleur3,walo());
 bouton3=creer_Bouton(bouton3);
 box3=ajouter_Box(box3,bouton1->button.elem,0,0,0,1);
 box3=ajouter_Box(box3,bouton2->button.elem,0,0,0,1);
