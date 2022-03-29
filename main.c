@@ -114,10 +114,10 @@ dimension walo2()
 
 /*************************************************************
   La fonction : init_window
-  -Entrees :  titre de la fenêtre
-      hauteur de notre fenêtre
-      largeur de notre fenêtre
-      position par defaults de la fenêtre :
+  -Entrees :  titre de la fenÃªtre
+      hauteur de notre fenÃªtre
+      largeur de notre fenÃªtre
+      position par defaults de la fenÃªtre :
         A = GTK_WIN_POS_NONE
         B = GTK_WIN_POS_CENTER
         C = GTK_WIN_POS_MOUSE
@@ -126,7 +126,7 @@ dimension walo2()
                 Ou bien
         position dans l'axe des x
         position dans l'axe des y
-      Possibilité de changer la taille:
+      PossibilitÃ© de changer la taille:
         0=NON
         1=OUI
       chemin de l'icon de la fenetre
@@ -176,7 +176,7 @@ Fenetre* init_window(gchar* titre,POS P,dimension D, gint res, gchar*path,color_
 /*************************************************************
  La fonction : pos_Window
  Entree :Un pointeur vers la structure Fenetre
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable W (Fenetre)
  Description : Cette fonction permet d'affecter un type de
     positionement de la fenetre
@@ -196,7 +196,7 @@ Fenetre *pos_Window(Fenetre*W)
             // Toujours au centre
         case 'D' : gtk_window_set_position(GTK_WINDOW(W->window),GTK_WIN_POS_CENTER_ALWAYS);
             break;
-            // Au centre par rapport a l'élement parent
+            // Au centre par rapport a l'Ã©lement parent
         case 'E' : gtk_window_set_position(GTK_WINDOW(W->window),GTK_WIN_POS_CENTER_ON_PARENT);
             break;
     }
@@ -205,10 +205,10 @@ Fenetre *pos_Window(Fenetre*W)
 /*************************************************************
  La fonction : creer_Window
  Entree :Un pointeur vers la structure Fenetre
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable W (Fenetre)
- Description : Cette fonction permet de créer une fenêtre en
-Fct des paramètres récupérés de la structure
+ Description : Cette fonction permet de crÃ©er une fenÃªtre en
+Fct des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure
                  Fenetre
 *************************************************************/
 Fenetre* creer_Window(Fenetre *W)
@@ -254,15 +254,15 @@ Fenetre* creer_Window(Fenetre *W)
 
 /*
  * structure du widget GTK_BOX
- * Expend: n'est utile que si la GtkBox en question n'est pas définie comme homogène (homogeneous=FALSE lors de la création).
- * Dans ce cas, tous les widgets qui auront été insérés avec la valeur expand=TRUE se partageront tout l'espace libre de la GtkBox
- * (les widgets avec expand=FALSE n'utiliseront que l'espace qui leur est nécessaire).
+ * Expend: n'est utile que si la GtkBox en question n'est pas dÃ©finie comme homogÃ¨ne (homogeneous=FALSE lors de la crÃ©ation).
+ * Dans ce cas, tous les widgets qui auront Ã©tÃ© insÃ©rÃ©s avec la valeur expand=TRUE se partageront tout l'espace libre de la GtkBox
+ * (les widgets avec expand=FALSE n'utiliseront que l'espace qui leur est nÃ©cessaire).
  */
 typedef struct
 {
     widg box;        // le box
     gchar type;    // type horizontal ou vertical
-    gint homogene; // l'homogénéité des fils du box ( true or false)
+    gint homogene; // l'homogÃ©nÃ©itÃ© des fils du box ( true or false)
     gint spacing; // nombre de pixles entre les fils du box
     gint bordure_taille; //taille de bordure dans le box
     color_widg *color; //couleur du box
@@ -324,10 +324,10 @@ MonBox*Init_box(GtkWidget*pere,gchar*titre,gchar type,gint homo,dimension dim,
 /*************************************************************
  La fonction : creer_Box
  Entree :Un pointeur vers la structure MonBox
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable B (MonBox)
- Description : Cette fonction permet de créer une Box en
-Fonction des paramètres récupérés de la structure MonBox
+ Description : Cette fonction permet de crÃ©er une Box en
+Fonction des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure MonBox
 *************************************************************/
 MonBox*creer_Box(MonBox*B)
 {
@@ -355,7 +355,7 @@ MonBox*creer_Box(MonBox*B)
 /*************************************************************
  La fonction : ajouter_Box
  Entree :Un pointeur vers la structure MonBox
-           initialisée et cree
+           initialisÃ©e et cree
          un pointeur sur un element (fils) qui sera
            inserer dans le box
          un boolean (fill)   : (1) le fils peut remplir son espace complet, 0 non
@@ -395,28 +395,28 @@ typedef struct
 
 /*************************************************************
  La fonction : init_creer_Grid
- -Entrées : titre du Grid
+ -EntrÃ©es : titre du Grid
  conteneur du Grid
- -Sortie : La structure widg (grid) après initialisation et création
- -Description : Cette fonction permet d’allouer de l’espace mémoire pour
- notre variable de type widg (grid), l’initialisé et le créé
+ -Sortie : La structure widg (grid) aprÃ¨s initialisation et crÃ©ation
+ -Description : Cette fonction permet dÂ’allouer de lÂ’espace mÃ©moire pour
+ notre variable de type widg (grid), lÂ’initialisÃ© et le crÃ©Ã©
 *************************************************************/
 widg *init_creer_Grid(gchar*titre,GtkWidget*conteneur,coordonnees cord,dimension dim,color_widg*couleur)
 {
- //pointeur sur un grid, allocation de la mémoire
+ //pointeur sur un grid, allocation de la mÃ©moire
  Mongrid *grid=(Mongrid *) malloc(sizeof(Mongrid)) ;
- //vérifier l’allocation
+ //vÃ©rifier lÂ’allocation
  test_allocation(grid, "grid") ;
- if(titre){// affecter un titre a notre grid s’il existe
+ if(titre){// affecter un titre a notre grid sÂ’il existe
  grid->Grid.titre=(gchar*) malloc(maxTitre*sizeof ((titre))) ;
  test_allocation(grid, "titre grid") ;
  gtk_widget_set_name(grid->Grid.elem,titre) ;
 
  }
  else grid->Grid.titre=NULL;
- grid->Grid.elem=gtk_grid_new() ;//créer un grid
+ grid->Grid.elem=gtk_grid_new() ;//crÃ©er un grid
  if(conteneur)
- grid->Grid.conteneur=conteneur ;//l’affecter son conteneur
+ grid->Grid.conteneur=conteneur ;//lÂ’affecter son conteneur
 
  else grid->Grid.conteneur=NULL;
  grid->D=dim;
@@ -441,13 +441,13 @@ widg *init_creer_Grid(gchar*titre,GtkWidget*conteneur,coordonnees cord,dimension
 /*************************************************************
 La fonction : ajouter_Grid_pos
 Entree :Un pointeur vers la structure widg
- initialisée
- un pointeur sur un élément(fils) a ajouté dans le grid
- coordonnées du fils
+ initialisÃ©e
+ un pointeur sur un Ã©lÃ©ment(fils) a ajoutÃ© dans le grid
+ coordonnÃ©es du fils
  dimension du fils
 Sortie : Un pointeur vers la variable grid (widg)
-Description : Cette fonction permet l’ajout d’un élément (widget)
-dans un grid à l’aide de ses coordonnées
+Description : Cette fonction permet lÂ’ajout dÂ’un Ã©lÃ©ment (widget)
+dans un grid Ã  lÂ’aide de ses coordonnÃ©es
 *************************************************************/
 widg *ajouter_Grid_pos(widg *grid,GtkWidget*fils,coordonnees filsCrd,
  dimension filsDim)
@@ -463,20 +463,20 @@ widg *ajouter_Grid_pos(widg *grid,GtkWidget*fils,coordonnees filsCrd,
 /*************************************************************
 La fonction : ajouter_Grid_cote_de
 Entree :Un pointeur vers la structure widg
- initialisée
- un pointeur sur un élément(fils) a ajouté dans le grid
- un pointeur sur un fils du grid (déjà ajouter dans le grid)
+ initialisÃ©e
+ un pointeur sur un Ã©lÃ©ment(fils) a ajoutÃ© dans le grid
+ un pointeur sur un fils du grid (dÃ©jÃ  ajouter dans le grid)
  un positionnement (side) :
- { GTK_POS_LEFT,(à gauche)
+ { GTK_POS_LEFT,(Ã  gauche)
  GTK_POS_RIGHT,(a droit)
  GTK_POS_TOP, (en haut)
  GTK_POS_BOTTOM (en bas) }
  dimension du fils
-Sortie : Un pointeur vers la variable grid (widg) après l’ajout
-Description : Cette fonction permet l’ajout d’un élément (fils)
-dans un grid a cote d’un autre élément dans le grid (frère) selon
+Sortie : Un pointeur vers la variable grid (widg) aprÃ¨s lÂ’ajout
+Description : Cette fonction permet lÂ’ajout dÂ’un Ã©lÃ©ment (fils)
+dans un grid a cote dÂ’un autre Ã©lÃ©ment dans le grid (frÃ¨re) selon
 un positionnement donne (side).
-si (frère n’est pas dans le grid (NULL)) l’élément sera ajouter au début du
+si (frÃ¨re nÂ’est pas dans le grid (NULL)) lÂ’Ã©lÃ©ment sera ajouter au dÃ©but du
 grid
 *************************************************************/
 widg *ajouter_Grid_cote_de(widg *grid,GtkWidget*fils,
@@ -821,7 +821,7 @@ typedef struct
     gdouble value;//valeur par defaut
     dimension D;
     gint wrap;//0:FALSE , 1:TRUE
-    gint digits;//nombre de chiffres en partie décimale
+    gint digits;//nombre de chiffres en partie dÃ©cimale
     gint numeric;//0:FALSE(tapez de caracteres en generale) , 1:TRUE(juste les chiffres)
     gint arrondissement;//0:FALSE , 1:TRUE
     color_widg *bgcolor;//background color
@@ -834,22 +834,22 @@ typedef struct
 
 /**
     fonction: init_spin_button
-    entreés :
+    entreÃ©s :
                gdouble val_min   :indique la valeur minimale du spin button
                gdouble val_max   :indique la valeur maximale du spin button
-               gdouble pas       :indique le pas d'incrémentation ou décrémentation
-               gdouble val_defaut:indique la valeur par défaut du spin button
+               gdouble pas       :indique le pas d'incrÃ©mentation ou dÃ©crÃ©mentation
+               gdouble val_defaut:indique la valeur par dÃ©faut du spin button
 dimension:     gint height       :indique la longueur du spin button
                gint width        :indique la largeur du spinbutton
-               gint wrap         :indique la possibilité de revient à la limite opposée lorsque la limite
-                                  supérieure ou inférieure de la place est dépassée(1:TRUE,0:FALSE)
-               gint digits       :indique le nombre de chiffres en partie décimale
-               gint numeric      :indique possibilité d'écrire juste les chiffres (1:TRUE),ou Ecrire tous caractères(0:FALSE)
-               gint arrondis     :indique possibilité d'arrondissement(1:TRUE,0:FALSE)
+               gint wrap         :indique la possibilitÃ© de revient Ã  la limite opposÃ©e lorsque la limite
+                                  supÃ©rieure ou infÃ©rieure de la place est dÃ©passÃ©e(1:TRUE,0:FALSE)
+               gint digits       :indique le nombre de chiffres en partie dÃ©cimale
+               gint numeric      :indique possibilitÃ© d'Ã©crire juste les chiffres (1:TRUE),ou Ecrire tous caractÃ¨res(0:FALSE)
+               gint arrondis     :indique possibilitÃ© d'arrondissement(1:TRUE,0:FALSE)
     sorties :
-               SpinButton bien initialisé
+               SpinButton bien initialisÃ©
     Description:
-                Cette fonction permet d'initialiser spinbutton et l'affecte des caractéristique
+                Cette fonction permet d'initialiser spinbutton et l'affecte des caractÃ©ristique
 */
 MonSpin * init_spin_button(gdouble val_min    , gdouble val_max , gdouble pas,
                                     gdouble val_defaut ,dimension dim, gint wrap ,
@@ -858,12 +858,12 @@ MonSpin * init_spin_button(gdouble val_min    , gdouble val_max , gdouble pas,
 {
 
     MonSpin *Sb = NULL;
-    //allocation mémoire
+    //allocation mÃ©moire
     Sb =(MonSpin*)malloc(sizeof(MonSpin));
 
     //test d'allocation
     test_allocation(Sb,"spin");
-    //allocation réussi
+    //allocation rÃ©ussi
     //Initialisation
     Sb->min = val_min ;
     Sb->max =val_max ;
@@ -891,15 +891,15 @@ MonSpin * init_spin_button(gdouble val_min    , gdouble val_max , gdouble pas,
     return ((MonSpin*)Sb);
 }
 
-/*************************Création********************/
+/*************************CrÃ©ation********************/
 /**
     fonction:   create_spin_button
-    entreés :
-                SpinButtonObjet *Sb:indique notre spinbutton object à créer
+    entreÃ©s :
+                SpinButtonObjet *Sb:indique notre spinbutton object Ã  crÃ©er
     sorties :
-                SpinButton bien crée
+                SpinButton bien crÃ©e
     desciprion:
-                cette fonction sert a créer spinbutton en utilisant des fonctions de base sur ses caractéristiques
+                cette fonction sert a crÃ©er spinbutton en utilisant des fonctions de base sur ses caractÃ©ristiques
 */
 void create_spin_button(MonSpin* Sb )
 
@@ -1004,7 +1004,7 @@ typedef struct
          GTK_ORIENTATION_VERTICAL
          GTK_ORIENTATION_HORIZONTAL
       un positionnement de la valeur du Scale (posD):
-           { GTK_POS_LEFT,(à gauche)
+           { GTK_POS_LEFT,(Ã  gauche)
            GTK_POS_RIGHT,(a droit)
            GTK_POS_TOP, (en haut)
            GTK_POS_BOTTOM (en bas) }
@@ -1042,10 +1042,10 @@ MonScale *init_scale(GtkWidget*pere,gchar*titre,GtkOrientation type,
 /*************************************************************
  La fonction : creer_scale
  Entree :Un pointeur vers la structure MonScale
-           initialisée
+           initialisÃ©e
  Sortie :  Un pointeur vers la variable S apres la creation
- Description : Cette fonction permet de créer un Scale en
-Fonction des paramètres récupérés de la structure MonScale
+ Description : Cette fonction permet de crÃ©er un Scale en
+Fonction des paramÃ¨tres rÃ©cupÃ©rÃ©s de la structure MonScale
 *************************************************************/
 MonScale *creer_scale(MonScale* S)
 {   //creation du scale
@@ -1176,8 +1176,8 @@ Monfixed *ajouter_Fixed(Monfixed *F,GtkWidget *fils,coordonnees C)
 
 typedef struct
 {
-    GtkWidget *barre; ///la barre de menu elle-même
-    GtkWidget *menu; ///la partie déroulante qui contient les différentes éléments
+    GtkWidget *barre; ///la barre de menu elle-mÃªme
+    GtkWidget *menu; ///la partie dÃ©roulante qui contient les diffÃ©rentes Ã©lÃ©ments
     GtkWidget *ptr_menu;///c'est sur ce widget que l'utilisateur clique pour lancer une action
     gchar* titre;
 }MonMenu;
@@ -1185,7 +1185,7 @@ typedef struct
 
 
 
-/// Structure de position d'un élement menu
+/// Structure de position d'un Ã©lement menu
 typedef struct
 {
 /// Emplacement
@@ -1218,7 +1218,7 @@ MonMenu* color_menu(MonMenu* M,int choix,color_widg* C)
   switch(choix)
   {
       case 1 : add_bgcolor(M->ptr_menu,C->color,C->opacity);   break; /// colorer la tete du menu
-      case 2 : add_bgcolor(M->menu,C->color,C->opacity);break; ///colorer les élements du menu
+      case 2 : add_bgcolor(M->menu,C->color,C->opacity);break; ///colorer les Ã©lements du menu
       case 3 :add_bgcolor(M->ptr_menu,C->color,C->opacity); /// les deux
               add_bgcolor(M->menu,C->color,C->opacity); break;
   }
@@ -1282,7 +1282,7 @@ MonMenu* Creer_Menu(MonMenu* monMenu)
     return (MonMenu*) monMenu;
 }
 /*************************************************************************************/
-/// creer un menu dans une barre spécifique
+/// creer un menu dans une barre spÃ©cifique
 MonMenu* Creer_Menu_barre(bar_menu* bar,MonMenu* monMenu)
 {
     monMenu->barre=bar->barre;
@@ -1428,11 +1428,11 @@ E->conteneur=cont;
 
 /**********************************************************
 La fonction : creer_Entry
--Entrees : L : objet entry initialisé
--Sortie : L : Objet label créé
+-Entrees : L : objet entry initialisÃ©
+-Sortie : L : Objet label crÃ©Ã©
 -Description:Cette fonction permet la creation d'un label
- en fct des paramètres récuperés de la structure
- Monlabel initialisée.
+ en fct des paramÃ¨tres rÃ©cuperÃ©s de la structure
+ Monlabel initialisÃ©e.
 ***********************************************************/
 
 
@@ -1556,11 +1556,11 @@ return((Monlabel*)L);
 
 /**********************************************************
 La fonction : creer_label
--Entrees : L : objet label initialisé
--Sortie : L : Objet label créé
+-Entrees : L : objet label initialisÃ©
+-Sortie : L : Objet label crÃ©Ã©
 -Description:Cette fonction permet la creation d'un label
- en fct des paramètres récuperés de la structure
- Monlabel initialisée.
+ en fct des paramÃ¨tres rÃ©cuperÃ©s de la structure
+ Monlabel initialisÃ©e.
 ***********************************************************/
 
 
@@ -1692,7 +1692,7 @@ void creer_dialog(MonDialog *D)
  gtk_window_set_transient_for(GTK_WINDOW (D->dialog ) , GTK_WINDOW ( D->tran));
  //affecter la dimension
  gtk_widget_set_size_request ( GTK_WIDGET(D->dialog) , D->dim.width ,D->dim.height);
- //si la fenêtre dialogue est modal activer la modalité
+ //si la fenÃªtre dialogue est modal activer la modalitÃ©
  if(D->modal == 1)
  gtk_window_set_modal(GTK_WINDOW(D->dialog) , TRUE);
  else gtk_window_set_modal(GTK_WINDOW(D->dialog) , FALSE);
@@ -1708,33 +1708,33 @@ if(D->couleur)
 
 
 /**
-GTK_RESPONSE_NONE = -1 : La boîte de dialogue a été détruite par
-le gestionnaire de fenêtres ou détruite par programme avec gtk_widget_destroy().
-Ceci est également renvoyé si un widget de réponsen'a pas d'identifiant de réponse
-défini.
-GTK_RESPONSE_REJECT = -2 :Cet identifiant n'est pas associé aux boutons des
-boîtes de dialogue intégrées, mais vous êtes libre de l'utiliser vous-même.
-GTK_RESPONSE_ACCEPT = -3 :Cet identifiant n'est pas associé aux boutons
-des boîtes de dialogue intégrées, mais vous êtes libre de l'utiliser vous-même.
-GTK_RESPONSE_DELETE_EVENT = -4 :Chaque boîte de dialogue est automatiquement
-connectée au signal d'événement de suppression. Pendant que gtk_dialog_run()
-est en cours d'exécution, cet identifiant sera renvoyé et l'événement
-de suppression ne pourra plus détruire la fenêtre comme d'habitude.
-GTK_RESPONSE_OK = -5 : un bouton GTK_STOCK_OK a été cliqué dans
-une boîte de dialogue intégrée. Vous êtes libre d'utiliser
-ce bouton ou l'un des suivants dans vos propres boîtes de dialogue.
+GTK_RESPONSE_NONE = -1 : La boÃ®te de dialogue a Ã©tÃ© dÃ©truite par
+le gestionnaire de fenÃªtres ou dÃ©truite par programme avec gtk_widget_destroy().
+Ceci est Ã©galement renvoyÃ© si un widget de rÃ©ponsen'a pas d'identifiant de rÃ©ponse
+dÃ©fini.
+GTK_RESPONSE_REJECT = -2 :Cet identifiant n'est pas associÃ© aux boutons des
+boÃ®tes de dialogue intÃ©grÃ©es, mais vous Ãªtes libre de l'utiliser vous-mÃªme.
+GTK_RESPONSE_ACCEPT = -3 :Cet identifiant n'est pas associÃ© aux boutons
+des boÃ®tes de dialogue intÃ©grÃ©es, mais vous Ãªtes libre de l'utiliser vous-mÃªme.
+GTK_RESPONSE_DELETE_EVENT = -4 :Chaque boÃ®te de dialogue est automatiquement
+connectÃ©e au signal d'Ã©vÃ©nement de suppression. Pendant que gtk_dialog_run()
+est en cours d'exÃ©cution, cet identifiant sera renvoyÃ© et l'Ã©vÃ©nement
+de suppression ne pourra plus dÃ©truire la fenÃªtre comme d'habitude.
+GTK_RESPONSE_OK = -5 : un bouton GTK_STOCK_OK a Ã©tÃ© cliquÃ© dans
+une boÃ®te de dialogue intÃ©grÃ©e. Vous Ãªtes libre d'utiliser
+ce bouton ou l'un des suivants dans vos propres boÃ®tes de dialogue.
 GTK_RESPONSE_CANCEL = -6 :
-un bouton GTK_STOCK_CANCEL a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_CANCEL a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_CLOSE = -7 :
-un bouton GTK_STOCK_CLOSE a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_CLOSE a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_YES = -8 :
-un bouton GTK_STOCK_YES a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_YES a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_NO = -9 :
-un bouton GTK_STOCK_NO a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_NO a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_APPLY = -10 :
-un bouton GTK_STOCK_APPLY a été cliqué dans une boîte de dialogue intégrée.
+un bouton GTK_STOCK_APPLY a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e.
 GTK_RESPONSE_HELP = -11 :
-un bouton GTK_STOCK_HELP a été cliqué dans une boîte de dialogue intégrée
+un bouton GTK_STOCK_HELP a Ã©tÃ© cliquÃ© dans une boÃ®te de dialogue intÃ©grÃ©e
 
 
 
@@ -1912,10 +1912,10 @@ MonScroll *creer_Scroll(MonScroll *scroll)
 
 typedef struct {
  widg frame; // le cadre
- GtkShadowType shadow_type;//le type de l’ombre
- float label_xalign; /*l’alignement x de l’étiquette le long du bord
- supérieur du widget*/
- float label_yalign; //l’alignement y de l’étiquette
+ GtkShadowType shadow_type;//le type de lÂ’ombre
+ float label_xalign; /*lÂ’alignement x de lÂ’Ã©tiquette le long du bord
+ supÃ©rieur du widget*/
+ float label_yalign; //lÂ’alignement y de lÂ’Ã©tiquette
  dimension dim; //dimension du cadre
  coordonnees C;
 }MonFrame;
@@ -1933,12 +1933,12 @@ typedef struct {
  GTK_SHADOW_OUT
  GTK_SHADOW_ETCHED_IN
  GTK_SHADOW_ETCHED_OUT
- label_xalign: indique l’alignement de l’étiquette au bord supérieur.
- La valeur 0.0 représente l’alignement à gauche,
- la valeur 1.0 représente l’alignement à droite.
- label_yalign: indique l’alignement y de l’étiquette.
- La valeur 0.0 s’aligne sous le cadre,
-la valeur 1.0 s’aligne au-dessus du cadre
+ label_xalign: indique lÂ’alignement de lÂ’Ã©tiquette au bord supÃ©rieur.
+ La valeur 0.0 reprÃ©sente lÂ’alignement Ã  gauche,
+ la valeur 1.0 reprÃ©sente lÂ’alignement Ã  droite.
+ label_yalign: indique lÂ’alignement y de lÂ’Ã©tiquette.
+ La valeur 0.0 sÂ’aligne sous le cadre,
+la valeur 1.0 sÂ’aligne au-dessus du cadre
  cont: pointeur sur le conteneur du cadre.
  dim: dimention de notre cadre {width,hieght}
  C: coordonnees de notre cadre
@@ -2038,7 +2038,7 @@ MonImage* init_image(gchar* url,gchar *titre,coordonnees C,GtkWidget *cont)
 }
 MonImage* creer_image(MonImage* M)
 {
-    //Creation de l'image à partir du chemin
+    //Creation de l'image Ã  partir du chemin
     M->image.elem= gtk_image_new_from_file(M->path);
     if(M->image.titre) gtk_widget_set_name(M->image.elem,M->image.titre);
     if(M->image.conteneur)
@@ -2056,9 +2056,9 @@ MonImage* creer_image(MonImage* M)
 typedef struct toolbarre
 {
 
-    GtkWidget *toolbar ; // barre d’outil
+    GtkWidget *toolbar ; // barre dÂ’outil
     GtkToolItem *toolitem; // les buttons de la barre
-    gchar* icon; // l’icon d’apres le stock
+    gchar* icon; // lÂ’icon dÂ’apres le stock
     color_widg *color;
 }Montool;
 
@@ -2080,7 +2080,7 @@ Montool * creat_toolbar(color_widg *color,GtkWidget *cont,dimension d){
 
 Montool * creat_toolitem(Montool* p,gchar* icone,gint pos)
 {
-//création d'un toolitem avec une icone du stock
+//crÃ©ation d'un toolitem avec une icone du stock
     p->toolitem= gtk_tool_button_new_from_stock(icone);
 //inseret le toolitem dans le toolbar
     gtk_toolbar_insert(GTK_TOOLBAR(p->toolbar), p->toolitem,pos);
@@ -2402,7 +2402,17 @@ gtk_main();
 
 
 
+/**
+                    *******        *******     ********      ****   *******      ****
+                    ********      ********    ***********    ****   ********     ****
+                    **** ****    **** ****   ****    *****   ****   **** ****    ****
+                    ****  ****  ****  ****   *************   ****   ****  ****   ****
+                    ****   ********   ****   *************   ****   ****   ****  ****
+                    ****     ****     ****   ****     ****   ****   ****    **** ****
+                    ****              ****   ****     ****   ****   ****     ********
+                    ****              ****   ****     ****   ****   ****      *******
 
+*/
 
 
 
