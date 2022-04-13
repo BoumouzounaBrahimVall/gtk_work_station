@@ -120,15 +120,15 @@ void afficher_pliste(cellulePliste *maliste)
     }
 }
 
-cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
+cellulePliste *listeentour(int surface[60][60],int pas,pos elem)
 {
     cellulePliste *Liste=NULL;
     int i,j;
     pos k={0,0};
-    if(elem.x>99||elem.y>99||elem.x<0||elem.y<0) return NULL;
+    if(elem.x>59||elem.y>59||elem.x<0||elem.y<0) return NULL;
     for(i=1;i<=pas;i++)
     {
-       if(elem.x+i<=99)
+       if(elem.x+i<=59)
        {
            if((surface[elem.x+i][elem.y])==1)
            {
@@ -137,7 +137,7 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
             Liste=InsererTetePListe(Liste,k);
            }
            for(j=1;j<=pas;j++){
-           if(elem.y+j<=99)
+           if(elem.y+j<=59)
            {
             if(surface[elem.x+i][elem.y+j]==1)
                {
@@ -181,7 +181,7 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
                    Liste=InsererTetePListe(Liste,k);
                }
            }
-           if(elem.y+j<=99)
+           if(elem.y+j<=59)
            {
                if(surface[elem.x-i][elem.y+j]==1)
                {
@@ -192,7 +192,7 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
            }
            }
 
-       if(elem.y+i<=99)
+       if(elem.y+i<=59)
        {
            if(surface[elem.x][elem.y+i]==1)
            {
@@ -223,7 +223,7 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
            }
            for(j=1;j<=pas;j++)
            {
-               if(elem.x+j<=99)
+               if(elem.x+j<=59)
                {
                    if(surface[elem.x+j][elem.y-i]==1)
                    {
@@ -250,14 +250,14 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
 }
 void main()
 {
-    int mat[100][100];
-    for(int i=0;i<100;i++){
-        for(int j=0;j<100;j++){
+    int mat[60][60];
+    for(int i=0;i<60;i++){
+        for(int j=0;j<60;j++){
             mat[i][j]=0;
         }
     }
-    for(int i=0;i<100;i+=40){
-        for(int j=0;j<100;j+=50){
+    for(int i=0;i<60;i+=40){
+        for(int j=0;j<60;j+=50){
             mat[i][j]=1;
         }
     }
@@ -272,11 +272,11 @@ void main()
     mat[2][2]=0;
     mat[3][3]=0;
     mat[0][55]=1;
-    mat[99][0]=1;
-    mat[1][99]=9;
+    mat[59][0]=1;
+    mat[1][59]=9;
     mat[1][0]=9;
-        for(int i=0;i<100;i++){
-        for(int j=0;j<100;j++){
+        for(int i=0;i<60;i++){
+        for(int j=0;j<60;j++){
            printf("%d",mat[j][i]);
         }
         printf("\n");
@@ -284,7 +284,7 @@ void main()
 
     printf("\n\n\n");
     cellulePliste *L;
-    pos elem={1,99};
+    pos elem={1,59};
     L=listeentour(mat,2,elem);
     L=supprimerocccellulePliste(L);
     afficher_pliste(L);
