@@ -125,7 +125,7 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
     cellulePliste *Liste=NULL;
     int i,j;
     pos k={0,0};
-    if(elem.x>99||elem.y>99) return NULL;
+    if(elem.x>99||elem.y>99||elem.x<0||elem.y<0) return NULL;
     for(i=1;i<=pas;i++)
     {
        if(elem.x+i<=99)
@@ -233,12 +233,13 @@ cellulePliste *listeentour(int surface[100][100],int pas,pos elem)
                    }
                }
 
-               if(elem.x-j<=0)
+               if(elem.x-j>=0)
                {
                    if(surface[elem.x-j][elem.y-i]==1)
                    {
                        k.x=elem.x-j;
                        k.y=elem.y-i;
+
                        Liste=InsererTetePListe(Liste,k);
                    }
                }
@@ -255,31 +256,36 @@ void main()
             mat[i][j]=0;
         }
     }
-    for(int i=0;i<100;i+=4){
-        for(int j=0;j<100;j+=5){
+    for(int i=0;i<100;i+=40){
+        for(int j=0;j<100;j+=50){
             mat[i][j]=1;
         }
     }
-    mat[1][1]=1;// verifier pourquoi cette case ne s'affiche pas
-    mat[0][0]=1;
-    mat[0][1]=1;
-    mat[0][2]=1;
-    mat[1][0]=1;
-    mat[2][0]=1;
-    mat[1][2]=1;
-    mat[2][1]=1;
-    mat[2][2]=1;
-    for(int i=0;i<100;i++){
+    mat[1][1]=0;
+    mat[0][0]=0;
+    mat[0][1]=0;
+    mat[0][2]=0;
+    mat[1][0]=0;
+    mat[2][0]=0;
+    mat[1][2]=0;
+    mat[2][1]=0;
+    mat[2][2]=0;
+    mat[3][3]=0;
+    mat[0][55]=1;
+    mat[99][0]=1;
+    mat[1][99]=9;
+    mat[1][0]=9;
+        for(int i=0;i<100;i++){
         for(int j=0;j<100;j++){
-           printf("%d",mat[i][j]);
+           printf("%d",mat[j][i]);
         }
         printf("\n");
     }
 
     printf("\n\n\n");
     cellulePliste *L;
-    pos elem={1,1},a={0,0};
-    L=listeentour(mat,1,elem);
+    pos elem={1,99};
+    L=listeentour(mat,2,elem);
     L=supprimerocccellulePliste(L);
     afficher_pliste(L);
 
